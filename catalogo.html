@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Catálogo NEXBYTE de hardware, componentes e periféricos." />
+  <title>Catálogo | NEXBYTE Tech Store</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .catalog-top{background:#fff;padding:1.5rem 0;border-bottom:1px solid #eadfd5}
+    .catalog-top h1{font-size:clamp(1.6rem,3vw,2.2rem);color:#4a3025;margin-bottom:.3rem}
+    .catalog-top p{color:#76665d}
+    .catalog-tools{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin:1.25rem 0}
+    .catalog-search{flex:1;min-width:220px;max-width:none!important}
+    .catalog-tools select{padding:.8rem .9rem;border-radius:9px;min-width:190px}
+    .catalog-layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:1.5rem;padding:1.75rem 0 3.5rem}
+    .catalog-sidebar{background:#fff;border:1px solid #e8ddd3;border-radius:12px;padding:1.1rem;height:max-content}
+    .filter-heading{font-size:.95rem;font-weight:800;color:#4a3025;margin:0 0 .8rem}
+    .filter-group{padding:0 0 1.1rem;margin:0 0 1.1rem;border-bottom:1px solid #eee5dd}
+    .filter-group:last-child{border:0;margin:0;padding:0}
+    .filter-option{display:flex;align-items:center;gap:.55rem;margin:.55rem 0;color:#5d4b40;font-size:.88rem}
+    .filter-option input{accent-color:#8b5e3c}
+    .price-inputs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+    .price-inputs input{width:100%;min-width:0;padding:.6rem;border-radius:7px}
+    .filter-reset{width:100%;border:1px solid #cbb6a5;background:#fff;color:#67452f;padding:.65rem;border-radius:8px;font-weight:700;cursor:pointer}
+    .results-line{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem;color:#76665d;font-size:.9rem}
+    .products-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+    .product-card{border-radius:10px}
+    .product-card .img-wrap{aspect-ratio:1.15}
+    .product-card .body{padding:1rem}
+    .product-card h3{font-size:.96rem;line-height:1.4;min-height:2.7em}
+    .catalog-card-meta{font-size:.72rem;color:#8b5e3c;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+    .catalog-stock{display:flex;align-items:center;gap:.4rem;color:#56704a;font-size:.76rem;margin-top:.65rem}
+    .catalog-stock .stock-dot{background:#6d965b}
+    .catalog-stock.out{color:#9b4b3f}
+    .catalog-stock.out .stock-dot{background:#b45b4d}
+    .catalog-empty{background:#fff;border:1px dashed #d8c6b7;border-radius:12px;padding:3rem 1rem;text-align:center;color:#76665d}
+    .catalog-empty strong{display:block;color:#4a3025;font-size:1.1rem;margin-bottom:.4rem}
+    @media(max-width:760px){.catalog-layout{grid-template-columns:1fr}.catalog-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.filter-group{margin:0}.filter-reset{align-self:end}.catalog-tools select{flex:1}.products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}}
+    @media(max-width:480px){.catalog-sidebar{grid-template-columns:1fr}.catalog-tools select{width:100%}.products-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}.product-card .body{padding:.75rem}.product-card .btn-add{padding:.5rem .65rem;font-size:.72rem}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">NEXBYTE<span class="logo-sub">TECH STORE</span></a>
+      <nav class="nav"><a href="index.html">Início</a><a href="catalogo.html">Catálogo</a><a href="sobre.html">Sobre</a></nav>
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-outline" data-auth-guest>Minha conta</a>
+        <span data-auth-user class="hidden">Olá, <strong data-user-name></strong> <button onclick="logout()" style="border:0;background:none;color:#8b5e3c;cursor:pointer">Sair</button></span>
+        <a href="carrinho.html" class="btn cart-btn">🛒 <span class="desktop-cart-label">Carrinho</span><span class="cart-count" data-cart-count style="display:none">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <section class="catalog-top">
+    <div class="container">
+      <h1>Hardware e periféricos</h1>
+      <p>Encontre as peças certas para montar, atualizar e personalizar seu setup.</p>
+      <div class="catalog-tools">
+        <input class="search-box catalog-search" id="product-search" type="search" placeholder="Buscar por produto, marca ou especificação..." aria-label="Buscar produtos" />
+        <select id="sort-select" aria-label="Ordenar produtos">
+          <option value="featured">Mais relevantes</option>
+          <option value="price-asc">Menor preço</option>
+          <option value="price-desc">Maior preço</option>
+          <option value="name">Nome A–Z</option>
+          <option value="stock">Maior disponibilidade</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="container catalog-layout">
+      <aside class="catalog-sidebar" aria-label="Filtros do catálogo">
+        <div class="filter-group">
+          <h2 class="filter-heading">Categorias</h2>
+          <div id="category-filters"></div>
+        </div>
+        <div class="filter-group">
+          <h2 class="filter-heading">Faixa de preço</h2>
+          <div class="price-inputs">
+            <input id="min-price" type="number" min="0" placeholder="Mín. R$" aria-label="Preço mínimo">
+            <input id="max-price" type="number" min="0" placeholder="Máx. R$" aria-label="Preço máximo">
+          </div>
+        </div>
+        <div class="filter-group">
+          <h2 class="filter-heading">Disponibilidade</h2>
+          <label class="filter-option"><input type="checkbox" id="in-stock"> Apenas com estoque preview</label>
+        </div>
+        <button class="filter-reset" id="reset-filters" type="button">Limpar filtros</button>
+      </aside>
+
+      <section aria-label="Resultados do catálogo">
+        <div class="results-line"><span id="count-label">Carregando catálogo...</span><span>Preços demonstrativos</span></div>
+        <div class="products-grid" id="products-grid"></div>
+        <div class="catalog-empty" id="empty-state" hidden><strong>Nenhum produto encontrado</strong>Altere os filtros ou tente outra busca.</div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div><div class="logo" style="color:#fff">NEXBYTE</div><p style="margin-top:.75rem;font-size:.9rem;opacity:.8;max-width:28ch">Tecnologia para montar, evoluir e jogar.</p></div>
+      <div><h4>Navegação</h4><p><a href="index.html">Início</a></p><p><a href="catalogo.html">Catálogo</a></p><p><a href="login.html">Minha conta</a></p></div>
+      <div><h4>Atendimento</h4><p style="font-size:.9rem;opacity:.8">Contato demonstrativo</p></div>
+      <div><h4>Informação</h4><p style="font-size:.9rem;opacity:.8">Estoque e preços de preview.</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 NEXBYTE Tech Store · Projeto demonstrativo</div>
+  </footer>
+
+  <script src="js/store-config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/catalog-api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let allProducts = [];
+    let activeCategory = "Todos";
+    const el = id => document.getElementById(id);
+    const money = value => Number(value || 0);
+
+    function renderCategories() {
+      const categories = ["Todos", ...new Set(allProducts.map(p => p.category))];
+      el("category-filters").innerHTML = categories.map(cat => `
+        <label class="filter-option"><input type="radio" name="category" value="${cat}" ${cat === activeCategory ? "checked" : ""}> ${cat}</label>
+      `).join("");
+      el("category-filters").querySelectorAll("input").forEach(input => input.addEventListener("change", () => {
+        activeCategory = input.value; renderProducts();
+      }));
+    }
+
+    function renderProducts() {
+      const term = el("product-search").value.trim().toLowerCase();
+      const min = el("min-price").value === "" ? 0 : money(el("min-price").value);
+      const max = el("max-price").value === "" ? Infinity : money(el("max-price").value);
+      const onlyStock = el("in-stock").checked;
+      let list = allProducts.filter(p => {
+        const text = [p.name,p.brand,p.category,p.shortDescription,...Object.values(p.specs || {})].join(" ").toLowerCase();
+        return (activeCategory === "Todos" || p.category === activeCategory)
+          && text.includes(term) && money(p.price) >= min && money(p.price) <= max
+          && (!onlyStock || money(p.stock) > 0);
+      });
+
+      const sort = el("sort-select").value;
+      if (sort === "price-asc") list.sort((a,b) => a.price-b.price);
+      if (sort === "price-desc") list.sort((a,b) => b.price-a.price);
+      if (sort === "name") list.sort((a,b) => a.name.localeCompare(b.name,"pt-BR"));
+      if (sort === "stock") list.sort((a,b) => b.stock-a.stock);
+      if (sort === "featured") list.sort((a,b) => Number(!!b.isFeatured)-Number(!!a.isFeatured));
+
+      el("count-label").textContent = `${list.length} ${list.length === 1 ? "produto encontrado" : "produtos encontrados"}`;
+      el("empty-state").hidden = list.length > 0;
+      el("products-grid").innerHTML = list.map(p => `
+        <article class="product-card">
+          <a href="produto.html?id=${encodeURIComponent(p.id)}"><div class="img-wrap">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+            ${p.isNew ? '<span class="badge">Lançamento</span>' : ""}
+            ${p.originalPrice ? '<span class="badge badge-offer">Oferta</span>' : ""}
+          </div></a>
+          <div class="body">
+            <p class="catalog-card-meta">${p.brand} · ${p.category}</p>
+            <h3><a href="produto.html?id=${encodeURIComponent(p.id)}">${p.name}</a></h3>
+            <p class="desc">${p.shortDescription || ""}</p>
+            <div class="catalog-stock ${p.stock > 0 ? "" : "out"}"><i class="stock-dot"></i>${p.stock > 0 ? `Preview: ${p.stock} unidades` : "Sem disponibilidade preview"}</div>
+            <div class="card-footer">
+              <div class="price-wrap">${p.originalPrice ? `<span class="price-old">${formatPrice(p.originalPrice)}</span>` : ""}<span class="price">${formatPrice(p.price)}</span></div>
+              <button type="button" class="btn-add" ${p.stock <= 0 ? "disabled" : ""} onclick="addToCart('${p.id}') && alert('Adicionado ao carrinho!')">Adicionar</button>
+            </div>
+          </div>
+        </article>`).join("");
+    }
+
+    async function initCatalog() {
+      try {
+        allProducts = await CatalogAPI.list();
+        renderCategories();
+        renderProducts();
+      } catch (error) {
+        el("count-label").textContent = "Não foi possível carregar o catálogo.";
+        el("empty-state").hidden = false;
+      }
+    }
+    ["product-search","min-price","max-price","in-stock","sort-select"].forEach(id => {
+      el(id).addEventListener(id === "product-search" ? "input" : "change", renderProducts);
+    });
+    el("reset-filters").addEventListener("click", () => {
+      activeCategory = "Todos"; el("product-search").value = ""; el("min-price").value = "";
+      el("max-price").value = ""; el("in-stock").checked = false; el("sort-select").value = "featured";
+      renderCategories(); renderProducts();
+    });
+    document.addEventListener("DOMContentLoaded", initCatalog);
+  </script>
+</body>
+</html>

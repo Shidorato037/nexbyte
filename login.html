@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09060d"><title>Acesso | NEXBYTE</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+:root{--auth-pink:#ff4fd8;--auth-pink-soft:#ff83e5;--auth-purple:#b45cff;--auth-purple-deep:#7134a8}
+*{box-sizing:border-box}
+body.auth-page{margin:0;min-height:100vh;display:grid;place-items:center;padding:28px 16px;background:radial-gradient(ellipse at 50% 0%,rgba(145,45,145,.2),transparent 48%),#09060d;color:#fff2ff;overflow-x:hidden}
+.auth-grid{position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:linear-gradient(rgba(196,91,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(196,91,255,.16) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,#000,transparent 90%)}
+.auth-glow{position:fixed;width:340px;height:340px;border-radius:50%;filter:blur(95px);opacity:.17;pointer-events:none;background:#8b35b6;left:-180px;top:15%;animation:drift 14s ease-in-out infinite alternate}
+.auth-glow.pink{width:230px;height:230px;left:auto;right:-120px;top:auto;bottom:5%;background:#ff4fd8;opacity:.12;animation-delay:-5s}
+@keyframes drift{to{transform:translate(90px,-40px)}}
+.auth-shell{width:min(460px,100%);position:relative;animation:enter .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.auth-brand{display:block;text-align:center;text-decoration:none;color:#fff7ff;font-size:1.8rem;font-weight:950;letter-spacing:-.07em;margin-bottom:7px}
+.auth-brand span{color:var(--auth-pink)}.auth-tagline{text-align:center;color:#b49bbd;font-size:.68rem;letter-spacing:.3em;margin-bottom:25px}
+.auth-card{padding:clamp(24px,6vw,38px);border:1px solid rgba(196,91,255,.26);border-radius:22px;background:linear-gradient(145deg,rgba(29,16,35,.98),rgba(12,7,16,.99));box-shadow:0 28px 90px rgba(0,0,0,.5),0 0 34px rgba(168,85,247,.07),inset 0 1px rgba(255,255,255,.035);backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.auth-card:before{content:"";position:absolute;left:18%;right:18%;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--auth-pink),var(--auth-purple),transparent)}
+.auth-heading{text-align:center;margin-bottom:23px}.auth-kicker{font-size:.67rem;letter-spacing:.2em;text-transform:uppercase;color:#e18aff;font-weight:800}.auth-heading h1{font-size:1.9rem;letter-spacing:-.05em;margin:9px 0 7px;color:#fff7ff}.auth-heading p{font-size:.86rem;color:#bba9c5;margin:0;line-height:1.55}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;border-radius:12px;background:#0b0710;border:1px solid #493052;margin-bottom:22px}
+.auth-tab{border:0;border-radius:8px;padding:11px 8px;background:transparent;color:#bba9c5;font-weight:800;font-size:.83rem;cursor:pointer;transition:.2s}
+.auth-tab[aria-selected="true"]{background:linear-gradient(110deg,rgba(196,45,153,.22),rgba(113,52,168,.28));color:#fff2ff;box-shadow:inset 0 0 0 1px rgba(255,79,216,.3)}
+.auth-field{margin:14px 0}.auth-field label{display:block;color:#e2d0e9;font-size:.78rem;font-weight:750;margin-bottom:7px}
+.auth-field input{width:100%;border:1px solid #50345a;border-radius:10px;padding:13px 14px;background:#0d0812;color:#fff7ff;font-size:.92rem;transition:border-color .2s,box-shadow .2s}
+.auth-field input:focus{outline:0;border-color:var(--auth-pink);box-shadow:0 0 0 3px rgba(255,79,216,.1)}.auth-field input::placeholder{color:#8e7a98}
+.password-wrap{position:relative}.password-wrap input{padding-right:82px}.reveal{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#e18aff;font-size:.7rem;font-weight:850;cursor:pointer}
+.auth-submit{width:100%;border:1px solid rgba(255,79,216,.35);border-radius:10px;padding:14px;color:#fff;background:linear-gradient(105deg,#a72d87,#7134a8);font-weight:850;letter-spacing:.02em;cursor:pointer;box-shadow:0 8px 24px rgba(168,45,135,.18);transition:transform .2s,filter .2s,box-shadow .2s;margin-top:10px}
+.auth-submit:hover{transform:translateY(-2px);filter:brightness(1.12);box-shadow:0 12px 28px rgba(196,45,153,.24)}.auth-submit:active{transform:scale(.99)}
+.auth-error{background:rgba(255,80,120,.1);border:1px solid rgba(255,100,140,.3);color:#ffb1c3;padding:11px;border-radius:9px;font-size:.82rem;margin-bottom:13px}
+.auth-foot{text-align:center;color:#9e8aa8;font-size:.7rem;line-height:1.6;margin:18px 0 0}.auth-back{display:block;text-align:center;color:#e18aff;text-decoration:none;font-size:.8rem;margin-top:18px}.auth-back:hover{color:#ff83e5}
+.auth-extra{display:none}.auth-extra.visible{display:block}.auth-meter{height:4px;border-radius:5px;background:#38243f;margin-top:7px;overflow:hidden}.auth-meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#a855f7,#ff4fd8);transition:width .25s}.auth-meter-label{font-size:.68rem;color:#aa96b5;margin-top:5px;min-height:1em}
+@media(max-width:480px){body.auth-page{padding:20px 13px}.auth-card{padding:24px 19px}.auth-heading h1{font-size:1.65rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="auth-page">
+<div class="auth-grid" aria-hidden="true"></div><div class="auth-glow" aria-hidden="true"></div><div class="auth-glow pink" aria-hidden="true"></div>
+<main class="auth-shell">
+<a href="index.html" class="auth-brand"><span data-store-name>NEXBYTE</span></a>
+<div class="auth-tagline" data-store-tagline>TECH STORE</div>
+<section class="auth-card" aria-labelledby="form-title">
+<header class="auth-heading"><div class="auth-kicker">Sua experiência começa aqui</div><h1 id="form-title">Acesse sua conta</h1><p id="form-sub">Entre para acompanhar sua jornada na NEXBYTE.</p></header>
+<div class="auth-tabs" role="tablist" aria-label="Acesso à conta">
+<button class="auth-tab" id="login-tab" type="button" role="tab" aria-selected="true">Entrar</button>
+<button class="auth-tab" id="register-tab" type="button" role="tab" aria-selected="false">Criar conta</button>
+</div>
+<div id="error" class="auth-error" hidden role="alert"></div>
+<form id="auth-form" novalidate>
+<div class="auth-field auth-extra" id="name-group"><label for="name">Nome completo</label><input id="name" type="text" autocomplete="name" placeholder="Como podemos te chamar?"></div>
+<div class="auth-field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com" required></div>
+<div class="auth-field"><label for="password">Senha</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required><button class="reveal" id="toggle-password" type="button">MOSTRAR</button></div>
+<div class="auth-extra" id="password-meter-wrap"><div class="auth-meter"><span id="meter-fill"></span></div><div class="auth-meter-label" id="meter-label">Use pelo menos 6 caracteres.</div></div></div>
+<div class="auth-field auth-extra" id="confirm-group"><label for="confirm-password">Confirmar senha</label><input id="confirm-password" type="password" autocomplete="new-password" placeholder="Digite a senha novamente"></div>
+<button class="auth-submit" id="submit-btn" type="submit">Entrar na NEXBYTE <span aria-hidden="true">↗</span></button>
+</form>
+<p class="auth-foot">Área demonstrativa: os dados ficam apenas neste navegador. Não utilize senhas reais ou informações sensíveis.</p>
+<a href="index.html" class="auth-back">← Voltar para a loja</a>
+</section>
+</main>
+<script src="js/store-config.js"></script><script src="js/products.js"></script><script src="js/app.js"></script>
+<script>
+document.querySelectorAll('[data-store-name]').forEach(e=>e.textContent=STORE_CONFIG.name);document.querySelectorAll('[data-store-tagline]').forEach(e=>e.textContent=STORE_CONFIG.tagline);
+let mode='login';const params=new URLSearchParams(location.search),redirect=params.get('redirect')||'index.html';if(getUser())location.replace(redirect);const $=id=>document.getElementById(id);
+function setMode(next){mode=next;const registering=mode==='register';$('error').hidden=true;$('name-group').classList.toggle('visible',registering);$('confirm-group').classList.toggle('visible',registering);$('password-meter-wrap').classList.toggle('visible',registering);$('login-tab').setAttribute('aria-selected',String(!registering));$('register-tab').setAttribute('aria-selected',String(registering));$('form-title').textContent=registering?'Crie sua conta':'Acesse sua conta';$('form-sub').textContent=registering?'Preencha seus dados para fazer parte da NEXBYTE.':'Entre para acompanhar sua jornada na NEXBYTE.';$('submit-btn').innerHTML=registering?'Criar minha conta <span aria-hidden="true">↗</span>':'Entrar na NEXBYTE <span aria-hidden="true">↗</span>';$('password').autocomplete=registering?'new-password':'current-password';$('confirm-password').required=registering;}
+$('login-tab').addEventListener('click',()=>setMode('login'));$('register-tab').addEventListener('click',()=>setMode('register'));
+$('toggle-password').addEventListener('click',()=>{const f=$('password'),show=f.type==='password';f.type=show?'text':'password';$('toggle-password').textContent=show?'OCULTAR':'MOSTRAR'});
+$('password').addEventListener('input',()=>{if(mode!=='register')return;const v=$('password').value;let score=0;if(v.length>=6)score++;if(v.length>=10)score++;if(/[A-Z]/.test(v)&&/[a-z]/.test(v))score++;if(/[0-9]/.test(v))score++;if(/[^A-Za-z0-9]/.test(v))score++;$('meter-fill').style.width=(score*20)+'%';$('meter-label').textContent=!v?'Use pelo menos 6 caracteres.':score<2?'Senha básica':score<4?'Senha razoável':'Senha forte'});
+$('auth-form').addEventListener('submit',e=>{e.preventDefault();const email=$('email').value.trim(),password=$('password').value,name=$('name').value.trim();let msg='';if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))msg='Digite um endereço de e-mail válido.';else if(password.length<6)msg='A senha precisa ter pelo menos 6 caracteres.';else if(mode==='register'&&!name)msg='Informe seu nome para criar a conta.';else if(mode==='register'&&password!==$('confirm-password').value)msg='As senhas não coincidem.';if(msg){$('error').textContent=msg;$('error').hidden=false;return;}setUser({name:mode==='register'?name:email.split('@')[0],email});$('submit-btn').textContent='Acesso liberado ✓';setTimeout(()=>location.href=redirect,350)});
+</script>
+</body></html>
